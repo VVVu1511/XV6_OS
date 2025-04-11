@@ -450,11 +450,11 @@ copyinstr(pagetable_t pagetable, char *dst, uint64 srcva, uint64 max)
   }
 }
 
-void vmprint_rec(pagetable_t pagetable, int level){
+void helpervmprint(pagetable_t pagetable, int level){
   for(int i = 0; i < 512; ++i){
     pte_t pte = pagetable[i];
     if ((pte & PTE_V) && (pte & (PTE_R|PTE_W|PTE_X)) == 0) {
-      // Đây là một bảng page table con
+      
       uint64 phaddr = PTE2PA(pte);
 
       int index = level;
@@ -464,9 +464,9 @@ void vmprint_rec(pagetable_t pagetable, int level){
       printf("..%d: pte %p pa %p\n", i,(void *) pte,(void *) phaddr);
 
       uint64 child = PTE2PA(pte);
-      vmprint_rec((pagetable_t)child, level + 1);
+      helpervmprint((pagetable_t)child, level + 1);
     } else if (pte & PTE_V) {
-      // Đây là trang thực (leaf)
+      
       uint64 phaddr = PTE2PA(pte);
 
       printf(".. .. ..%d: pte %p pa %p\n", i,(void *) pte,(void *) phaddr);
@@ -477,5 +477,5 @@ void vmprint_rec(pagetable_t pagetable, int level){
 void
 vmprint(pagetable_t pagetable) {
   printf("page table %p\n", pagetable);
-  vmprint_rec(pagetable, 0);
+  helpervmprint(pagetable, 0);
 }

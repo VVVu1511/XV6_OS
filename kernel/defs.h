@@ -156,7 +156,7 @@ void            uartputc_sync(int);
 int             uartgetc(void);
 
 // vm.c
-void            vmprint_rec(pagetable_t, int);
+void            helpervmprint(pagetable_t, int);
 void            vmprint(pagetable_t);
 void            kvminit(void);
 void            kvminithart(void);
